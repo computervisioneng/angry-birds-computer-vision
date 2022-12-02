@@ -59,43 +59,6 @@ def detect_object(YOLO_MODEL, img):
     return prediction
 
 
-def detect_pigs_yolov3():
-
-    global YOLO_MODEL
-
-    img = pyautogui.screenshot()
-    img = np.asarray(img)
-
-    img = img[239:889, 360:1560, :]
-
-    img_path = './tmp.png'
-
-    cv2.imwrite(img_path, img)
-
-    model_weights = os.path.join(YOLO_DIR, "trained_weights_final.h5")
-
-    # define YOLO detector
-    if YOLO_MODEL is None:
-        YOLO_MODEL = get_yolo_detector(model_weights, confidence_threshold=0.9)
-
-    prediction, image = detect_object_yolo(
-        YOLO_MODEL,
-        img_path,
-        save_img=False,
-        save_img_path=None,
-        postfix='',
-    )
-
-    detections = []
-    for single_prediction in prediction:
-        x1, y1, x2, y2, class_, score = single_prediction
-        detections.append([int((x1 + x2) / 2), int((y1 + y2) / 2)])
-
-    os.remove(img_path)
-
-    return detections
-
-
 class Bird():
     def __init__(self, distance, angle, x, y, space):
         self.life = 20
